@@ -1,0 +1,89 @@
+// SpeedBreaker runtime. GPL-3.0-or-later (see COPYING).
+//
+// Controller input (Phase 6): SDL3 gamepads and the keyboard, presented to
+// the game as XInput controller 0 through XamInputGetState.
+//
+//   - Split screen (game/split_screen.h; the rule is hid/player_slots.h):
+//     while the game is in Quick Race > Split Screen, every other controller
+//     is opened, and each one used becomes XInput user 1 (then 2, 3) with its
+//     own state and rumble; player 1 stays user 0, the keyboard and the
+//     controller that drove the menus. Outside split screen users 1-3 read
+//     not connected and only that one controller is opened, as before. Our
+//     menu's Back + Start is player 1's (IsOtherPlayersPad). A pad unplugged
+//     reads not connected (the game's own message). NFSMW_OTHER_PADS=always
+//     exposes them outside split screen too (a diagnostic);
+//     NFSMW_SPLIT_SCREEN=0, never.
+//
+//   - Sticks get a radial deadzone with rescaling (Settings > Input, or
+//     NFSMW_DEADZONE; default 0.08 of full deflection), so worn or drifting
+//     sticks rest at exactly zero while small movements still ramp up
+//     smoothly from the edge of the deadzone. Triggers get their own
+//     (NFSMW_TRIGGER_DEADZONE, default 0.02).
+//   - Keyboard: each Xbox 360 control has two keys (Settings > Controls;
+//     the [keys] table of settings.toml; hid/key_map.h lists them).
+//     Defaults: arrows = D-pad, A/D and Left/Right = steer, Up/Down = left
+//     stick too, W/S = gas/brake (RT/LT), Space = A, Backspace = B,
+//     Left Shift = X, Left Ctrl = Y, Q/E = LB/RB, Enter = START, Esc = BACK,
+//     O/L/K/; = right stick, Z/C = the stick clicks. A key may drive several.
+//   - A USB steering wheel (hid/wheel.h and hid/wheel_map.h, Settings >
+//     Wheel) is used instead of a controller while one is plugged in: its
+//     own steering curve reaches the left stick, its pedals the triggers
+//     and its paddles the right stick, so the stick deadzone above is not
+//     applied to it. Its force feedback takes the rumble the game asks for.
+//   - NFSMW_INPUT_SCRIPT="12:START,15.5:A,30-90/4:DOWN,100~160:RT": taps
+//     (150 ms) at seconds since launch, taps every `step` seconds over a
+//     range, or inputs held over a range; RT/LT (triggers) and LL/LR/LU/LD
+//     (left stick) besides the buttons. For automated runs; works headless.
+//     It feeds the game after the deadzones.
+//   - NFSMW_VIRTUAL_PAD="2:LX=0.05,4:RT=0.06": an SDL virtual controller whose
+//     axes take those values at those seconds, through the deadzones, and
+//     whose rumble is logged with what the game asked for (tests of the
+//     Input settings without a person). Buttons too ("5:BACK=1", "5.2:BACK=0",
+//     "6:DOWN" for a tap), which reach the menus as a real controller's do.
+//     Both count seconds of guest time (cpu/guest_time.h): a suspension
+//     doesn't count, so what falls due during one happens after it.
+//     NFSMW_VIRTUAL_PAD_2 (_3, _4), the same syntax plus "40:DETACH" and
+//     "50:ATTACH" (unplug, plug in again): more virtual controllers, for
+//     split-screen tests.
+//   - NFSMW_INPUT_LOG=1: the left stick and triggers once a second, raw and
+//     as the game gets them.
+//   - NFSMW_INPUT_FILE=<path>: live input from a test driver outside, one
+//     line ("LX=-0.3 RT=1 LT=0 BTN=A,B"), read again whenever the file
+//     changes; with NFSMW_FRAME_TAP (debug/frame_tap.cpp) a closed loop.
+//   - iOS: with no controller (and no keyboard attached) a toast says the
+//     game needs one, 5 s after the game starts (NoteGameStarting) and 1 s
+//     after the last one goes; one connecting takes it down.
+#pragma once
+#include <SDL3/SDL_events.h>
+
+namespace hid
+{
+    // Main thread, after SDL video is up.
+    void Initialize();
+    // Main thread, as the game itself starts (after the installer, if it
+    // ran): on iOS, the "needs a controller" notice is due 5 s later if
+    // there is none by then. Elsewhere nothing.
+    void NoteGameStarting();
+    void HandleEvent(const SDL_Event& event);
+    // Main thread, once per presented frame: sample devices.
+    void Update();
+    // While set (a menu is open), the game sees an idle controller, and
+    // after it is cleared until every control has been released.
+    void SetBlocked(bool blocked);
+    // Main thread: seconds since any control was last pressed or moved (a
+    // controller, the keyboard's controls, NFSMW_INPUT_SCRIPT), as of the
+    // last Update; from the first Update on.
+    double SecondsSinceInput();
+    // At exit: stop any rumble (the process may outlive nothing that would).
+    void Shutdown();
+    // NFSMW_INPUT_SCRIPT's clock: guest seconds since launch (any thread).
+    double ScriptSeconds();
+    // Main thread: the controller is another player's in split screen (XInput
+    // user 1-3), so our menu's Back + Start chord isn't its to fire.
+    bool IsOtherPlayersPad(SDL_JoystickID id);
+    // Main thread, from the frame loop (not UIKit's callback), once the game
+    // is suspended (iOS: the app isn't active) and once it's back: Suspend
+    // stops any rumble, Resume sends the game's last request again.
+    void Suspend();
+    void Resume();
+}

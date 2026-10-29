@@ -1,0 +1,890 @@
+# bctr 0x821d6c94 in 0x821d6c7c: absolute table at 0x821d6c98, index r3, 5 entries (no bounds check)
+[[switch]]
+base = 0x821D6C88
+r = 3
+labels = [
+    0x821D6CAC,
+    0x821D6CB4,
+    0x821D6CCC,
+    0x821D6CBC,
+    0x821D6CC4,
+]
+
+# bctr 0x821de16c in 0x821ddf00: absolute table at 0x821de170, index r4, 128 entries (no bounds check)
+[[switch]]
+base = 0x821DE160
+r = 4
+labels = [
+    0x821DE3A8,
+    0x821DE390,
+    0x821DE3B0,
+    0x821DE398,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE370,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE380,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE378,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3A0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE3B0,
+    0x821DE388,
+]
+
+# bctr 0x821e7914 in 0x821e78f0: absolute table at 0x821e7918, index r3, 4 entries (no bounds check)
+[[switch]]
+base = 0x821E7908
+r = 3
+labels = [
+    0x821E7928,
+    0x821E7940,
+    0x821E7958,
+    0x821E7970,
+]
+
+# bctr 0x821f6f18 in 0x821f6f00: absolute table at 0x821f6f1c, index r4, 16 entries (no bounds check)
+[[switch]]
+base = 0x821F6F0C
+r = 4
+labels = [
+    0x821F6F5C,
+    0x821F6F70,
+    0x821F6F84,
+    0x821F6F98,
+    0x821F6FAC,
+    0x821F6FC0,
+    0x821F7038,
+    0x821F7038,
+    0x821F6FD4,
+    0x821F7038,
+    0x821F7038,
+    0x821F6FE8,
+    0x821F6FE8,
+    0x821F6FFC,
+    0x821F7010,
+    0x821F7024,
+]
+
+# bctr 0x821f7068 in 0x821f6f00: absolute table at 0x821f706c, index r4, 5 entries (no bounds check)
+[[switch]]
+base = 0x821F705C
+r = 4
+labels = [
+    0x821F7080,
+    0x821F7094,
+    0x821F70D0,
+    0x821F70A8,
+    0x821F70BC,
+]
+
+# bctr 0x821f7110 in 0x821f6f00: absolute table at 0x821f7114, index r4, 4 entries (no bounds check)
+[[switch]]
+base = 0x821F7104
+r = 4
+labels = [
+    0x821F7160,
+    0x821F7124,
+    0x821F714C,
+    0x821F7138,
+]
+
+# bctr 0x821f7240 in 0x821f6f00: absolute table at 0x821f7244, index r4, 4 entries (no bounds check)
+[[switch]]
+base = 0x821F7234
+r = 4
+labels = [
+    0x821F7290,
+    0x821F7254,
+    0x821F727C,
+    0x821F7268,
+]
+
+# bctr 0x821f72d0 in 0x821f6f00: absolute table at 0x821f72d4, index r4, 20 entries (no bounds check)
+[[switch]]
+base = 0x821F72C4
+r = 4
+labels = [
+    0x821F7324,
+    0x821F7338,
+    0x821F734C,
+    0x821F7360,
+    0x821F7374,
+    0x821F7388,
+    0x821F739C,
+    0x821F73B0,
+    0x821F73C4,
+    0x821F73D8,
+    0x821F73EC,
+    0x821F7400,
+    0x821F7414,
+    0x821F7428,
+    0x821F743C,
+    0x821F7450,
+    0x821F7464,
+    0x821F7478,
+    0x821F748C,
+    0x821F74A0,
+]
+
+# bctr 0x821f74f8 in 0x821f74d0: absolute table at 0x821f74fc, index r4, 7 entries (no bounds check)
+[[switch]]
+base = 0x821F74EC
+r = 4
+labels = [
+    0x821F75A8,
+    0x821F75CC,
+    0x821F7560,
+    0x821F753C,
+    0x821F7518,
+    0x821F75F0,
+    0x821F7584,
+]
+
+# bctr 0x82219ae8 in 0x82219ac0: absolute table at 0x82219aec, index r7, 29 entries (no bounds check)
+[[switch]]
+base = 0x82219ADC
+r = 7
+labels = [
+    0x82219B60,
+    0x82219B7C,
+    0x82219BF0,
+    0x82219C0C,
+    0x82219C40,
+    0x82219C7C,
+    0x82219CB8,
+    0x82219CF4,
+    0x82219D2C,
+    0x82219D10,
+    0x82219D80,
+    0x82219D64,
+    0x82219DD4,
+    0x82219DB8,
+    0x82219D48,
+    0x82219D9C,
+    0x82219DF0,
+    0x82219E0C,
+    0x82219E34,
+    0x82219E50,
+    0x82219E6C,
+    0x82219E88,
+    0x82219EA4,
+    0x82219EDC,
+    0x82219EC0,
+    0x82219EF8,
+    0x82219F28,
+    0x82219F5C,
+    0x82219F90,
+]
+
+# bctr 0x8221a01c in 0x82219ff0: absolute table at 0x8221a020, index r7, 38 entries (no bounds check)
+[[switch]]
+base = 0x8221A010
+r = 7
+labels = [
+    0x8221A0B8,
+    0x8221A0DC,
+    0x8221A100,
+    0x8221A120,
+    0x8221A144,
+    0x8221A184,
+    0x8221A1A4,
+    0x8221A164,
+    0x8221A224,
+    0x8221A244,
+    0x8221A1C4,
+    0x8221A1E4,
+    0x8221A204,
+    0x8221A268,
+    0x8221A288,
+    0x8221A2A8,
+    0x8221A2DC,
+    0x8221A330,
+    0x8221A36C,
+    0x8221A38C,
+    0x8221A3CC,
+    0x8221A3EC,
+    0x8221A40C,
+    0x8221A42C,
+    0x8221A3AC,
+    0x8221A44C,
+    0x8221A46C,
+    0x8221A48C,
+    0x8221A4AC,
+    0x8221A4CC,
+    0x8221A4F4,
+    0x8221A310,
+    0x8221A528,
+    0x8221A548,
+    0x8221A568,
+    0x8221A588,
+    0x8221A5A8,
+    0x8221A5C8,
+]
+
+# bctr 0x8221a678 in 0x8221a650: absolute table at 0x8221a67c, index r7, 5 entries (no bounds check)
+[[switch]]
+base = 0x8221A66C
+r = 7
+labels = [
+    0x8221A690,
+    0x8221A6E0,
+    0x8221A6F8,
+    0x8221A714,
+    0x8221A73C,
+]
+
+# bctr 0x8221a7f8 in 0x8221a7d0: absolute table at 0x8221a7fc, index r8, 37 entries (no bounds check)
+[[switch]]
+base = 0x8221A7EC
+r = 8
+labels = [
+    0x8221A8E4,
+    0x8221A900,
+    0x8221A890,
+    0x8221A8AC,
+    0x8221A8C8,
+    0x8221A91C,
+    0x8221A938,
+    0x8221A954,
+    0x8221A970,
+    0x8221A98C,
+    0x8221A9A8,
+    0x8221A9C4,
+    0x8221A9E0,
+    0x8221AA08,
+    0x8221AA24,
+    0x8221AA54,
+    0x8221AA70,
+    0x8221AA8C,
+    0x8221AAB4,
+    0x8221AAD0,
+    0x8221AAF8,
+    0x8221AB14,
+    0x8221AB30,
+    0x8221AB50,
+    0x8221AB70,
+    0x8221AB90,
+    0x8221ABB0,
+    0x8221ABD0,
+    0x8221ABF0,
+    0x8221AC0C,
+    0x8221AC28,
+    0x8221AC44,
+    0x8221AC60,
+    0x8221AC7C,
+    0x8221AC98,
+    0x8221ACB4,
+    0x8221ACD0,
+]
+
+# bctr 0x82287adc in 0x82287a50: absolute table at 0x82287ae0, index r29, 5 entries (no bounds check)
+[[switch]]
+base = 0x82287AD0
+r = 29
+labels = [
+    0x82287AF4,
+    0x82287B04,
+    0x82287AF4,
+    0x82287B18,
+    0x82287AF4,
+]
+
+# bctr 0x82297954 in 0x82297940: absolute table at 0x82297958, index r3, 10 entries (no bounds check)
+[[switch]]
+base = 0x82297948
+r = 3
+labels = [
+    0x82297980,
+    0x82297988,
+    0x82297990,
+    0x82297998,
+    0x822979A8,
+    0x822979B0,
+    0x822979B0,
+    0x822979B8,
+    0x822979A0,
+    0x822979C0,
+]
+
+# bctr 0x822a42ec in 0x822a42d8: absolute table at 0x822a42f0, index r6, 12 entries (no bounds check)
+[[switch]]
+base = 0x822A42E0
+r = 6
+labels = [
+    0x822A4338,
+    0x822A4354,
+    0x822A438C,
+    0x822A43A8,
+    0x822A43C0,
+    0x822A4320,
+    0x822A43C0,
+    0x822A43C8,
+    0x822A43C8,
+    0x822A4320,
+    0x822A43E4,
+    0x822A4370,
+]
+
+# bctr 0x822bea08 in 0x822be9e8: absolute table at 0x822bea0c, index r5, 10 entries (no bounds check)
+[[switch]]
+base = 0x822BE9FC
+r = 5
+labels = [
+    0x822BEA58,
+    0x822BEC08,
+    0x822BEAC4,
+    0x822BEC18,
+    0x822BEB1C,
+    0x822BEC10,
+    0x822BEB88,
+    0x822BEBC0,
+    0x822BEA34,
+    0x822BEC20,
+]
+
+# bctr 0x822ff3bc in 0x822ff2f0: absolute table at 0x822ff3c0, index r3, 6 entries (no bounds check)
+[[switch]]
+base = 0x822FF3B0
+r = 3
+labels = [
+    0x822FF408,
+    0x822FF3D8,
+    0x822FF3E4,
+    0x822FF3F0,
+    0x822FF3F0,
+    0x822FF3FC,
+]
+
+# bctr 0x822ffb4c in 0x822ffa98: absolute table at 0x822ffb50, index r3, 6 entries (no bounds check)
+[[switch]]
+base = 0x822FFB40
+r = 3
+labels = [
+    0x822FFB68,
+    0x822FFB80,
+    0x822FFB9C,
+    0x822FFBB8,
+    0x822FFBD4,
+    0x822FFBF0,
+]
+
+# bctr 0x8233eb50 in 0x8233e8fc: absolute table at 0x8233eb54, index r3, 16 entries (no bounds check)
+[[switch]]
+base = 0x8233EB44
+r = 3
+labels = [
+    0x8233EBA0,
+    0x8233EB94,
+    0x8233EBD4,
+    0x8233EBD4,
+    0x8233EBD4,
+    0x8233EBAC,
+    0x8233EBD4,
+    0x8233EBD4,
+    0x8233EBD4,
+    0x8233EBD4,
+    0x8233EBD4,
+    0x8233EBD4,
+    0x8233EBD4,
+    0x8233EBC4,
+    0x8233EBD0,
+    0x8233EBB8,
+]
+
+# bctr 0x8234516c in 0x82345140: absolute table at 0x82345170, index r30, 12 entries (no bounds check)
+[[switch]]
+base = 0x82345160
+r = 30
+labels = [
+    0x823451A0,
+    0x823451AC,
+    0x823451AC,
+    0x823451B8,
+    0x823451C4,
+    0x823451D0,
+    0x823451D0,
+    0x823451DC,
+    0x823451F4,
+    0x823451E8,
+    0x82345200,
+    0x8234520C,
+]
+
+# bctr 0x8238d984 in 0x8238d860: absolute table at 0x8238d988, index r3, 11 entries (no bounds check)
+[[switch]]
+base = 0x8238D978
+r = 3
+labels = [
+    0x8238DA04,
+    0x8238D9B4,
+    0x8238D9BC,
+    0x8238D9C4,
+    0x8238D9CC,
+    0x8238D9D4,
+    0x8238D9DC,
+    0x8238D9E4,
+    0x8238D9EC,
+    0x8238D9F4,
+    0x8238D9FC,
+]
+
+# bctr 0x823dc0bc in 0x823dc078: absolute table at 0x823dc0c0, index r8, 4 entries (no bounds check)
+[[switch]]
+base = 0x823DC0B0
+r = 8
+labels = [
+    0x823DC0D0,
+    0x823DC0FC,
+    0x823DC104,
+    0x823DC104,
+]
+
+# bctr 0x8255a444 in 0x8255a42c: absolute table at 0x8255a448, index r3, 64 entries (no bounds check)
+[[switch]]
+base = 0x8255A438
+r = 3
+labels = [
+    0x8255A558,
+    0x8255A558,
+    0x8255A560,
+    0x8255A558,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A548,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A550,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A558,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A560,
+    0x8255A558,
+]
+
+# bctr 0x825b39fc in 0x825b39e4: absolute table at 0x825b3a00, index r6, 45 entries (no bounds check)
+[[switch]]
+base = 0x825B39F0
+r = 6
+labels = [
+    0x825B3ADC,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3AB4,
+    0x825B3AB4,
+    0x825B3AB4,
+    0x825B3AB4,
+    0x825B3AB4,
+    0x825B3AB4,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3B00,
+    0x825B3AC8,
+    0x825B3AC8,
+]
+
+# bctr 0x825d88a8 in 0x825d8740: absolute table at 0x825d88ac, index r3, 49 entries (no bounds check)
+[[switch]]
+base = 0x825D889C
+r = 3
+labels = [
+    0x825D8970,
+    0x825D8970,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8970,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8970,
+    0x825D8970,
+    0x825D8970,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8970,
+    0x825D8974,
+    0x825D8970,
+    0x825D8974,
+    0x825D8974,
+    0x825D8970,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8970,
+    0x825D8970,
+    0x825D8970,
+    0x825D8970,
+    0x825D8970,
+    0x825D8970,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8970,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8974,
+    0x825D8970,
+    0x825D8974,
+    0x825D8974,
+    0x825D8970,
+]
+
+# bctr 0x8264535c in 0x82645330: absolute table at 0x82645360, index r6, 10 entries (no bounds check)
+[[switch]]
+base = 0x82645350
+r = 6
+labels = [
+    0x82645388,
+    0x82645438,
+    0x8264553C,
+    0x82645640,
+    0x82645704,
+    0x826457E8,
+    0x826458EC,
+    0x826459B0,
+    0x82645A00,
+    0x82645B50,
+]
+
+# bctr 0x8265b95c in 0x8265b944: absolute table at 0x8265b960, index r3, 7 entries (no bounds check)
+[[switch]]
+base = 0x8265B950
+r = 3
+labels = [
+    0x8265B97C,
+    0x8265B988,
+    0x8265B994,
+    0x8265B9A0,
+    0x8265B9AC,
+    0x8265B9B8,
+    0x8265B9C4,
+]
+
+# bctr 0x8265e148 in 0x8265e120: absolute table at 0x8265e14c, index r5, 6 entries (no bounds check)
+[[switch]]
+base = 0x8265E13C
+r = 5
+labels = [
+    0x8265E310,
+    0x8265E164,
+    0x8265E164,
+    0x8265E354,
+    0x8265E48C,
+    0x8265E500,
+]
+
+# bctr 0x82676d24 in 0x82676bdc: absolute table at 0x82676d28, index r3, 38 entries (no bounds check)
+[[switch]]
+base = 0x82676D18
+r = 3
+labels = [
+    0x82676DD8,
+    0x82676DF0,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676DC0,
+    0x82676E08,
+    0x82676DC8,
+    0x82676E08,
+    0x82676E00,
+    0x82676DE8,
+    0x82676DE0,
+    0x82676DD0,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676E08,
+    0x82676DF8,
+]
+
+# bctr 0x8267e038 in 0x8267dfa8: absolute table at 0x8267e03c, index r30, 7 entries (no bounds check)
+[[switch]]
+base = 0x8267E02C
+r = 30
+labels = [
+    0x8267E058,
+    0x8267E0B4,
+    0x8267E120,
+    0x8267E278,
+    0x8267E188,
+    0x8267E278,
+    0x8267E278,
+]
+
+# bctr 0x828c23f4 in 0x828c2008: absolute table at 0x828c23f8, index r19, 21 entries (no bounds check)
+[[switch]]
+base = 0x828C23E8
+r = 19
+labels = [
+    0x828C244C,
+    0x828C244C,
+    0x828C25A8,
+    0x828C244C,
+    0x828C244C,
+    0x828C2534,
+    0x828C244C,
+    0x828C24C0,
+    0x828C244C,
+    0x828C244C,
+    0x828C25A8,
+    0x828C25A8,
+    0x828C244C,
+    0x828C244C,
+    0x828C25A8,
+    0x828C25A8,
+    0x828C25A8,
+    0x828C25A8,
+    0x828C244C,
+    0x828C244C,
+    0x828C244C,
+]
+
+# bctr 0x82b1b204 in 0x82b1b018: absolute table at 0x82b1b208, index r8, 4 entries (no bounds check)
+[[switch]]
+base = 0x82B1B1F8
+r = 8
+labels = [
+    0x82B1CED0,
+    0x82B1DD64,
+    0x82B1C068,
+    0x82B1B218,
+]
+
+# bctr 0x82b1f3c4 in 0x82b1b018: absolute table at 0x82b1f3c8, index r9, 7 entries (no bounds check)
+[[switch]]
+base = 0x82B1F3B8
+r = 9
+labels = [
+    0x82B21C60,
+    0x82B2329C,
+    0x82B20820,
+    0x82B1F3E4,
+    0x82B27434,
+    0x82B25540,
+    0x82B264B8,
+]
+

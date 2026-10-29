@@ -1,0 +1,57 @@
+// SpeedBreaker's Windows resources. GPL-3.0-or-later (see COPYING).
+// The icon (scripts/windows/make_ico.py), the version block, and the
+// manifest (linked with /MANIFEST:NO, so this is the only one). NFS:
+// Carbon's build (SB_GAME_CARBON) has its own icon, manifest and names
+// (game/game_info.h SB_APP_NAME, SB_WINDOWS_EXE); Most Wanted's are as
+// before.
+#include <winver.h>
+
+#ifdef SB_GAME_CARBON
+#define SB_RC_ICON "speedbreaker-carbon.ico"
+#define SB_RC_MANIFEST "speedbreaker-carbon.manifest"
+#define SB_RC_NAME "SpeedBreaker Carbon"
+#define SB_RC_DESCRIPTION "SpeedBreaker: Carbon"
+#define SB_RC_INTERNAL "SpeedBreaker-Carbon"
+#define SB_RC_FILE "SpeedBreaker-Carbon.exe"
+#else
+#define SB_RC_ICON "speedbreaker.ico"
+#define SB_RC_MANIFEST "speedbreaker.manifest"
+#define SB_RC_NAME "SpeedBreaker"
+#define SB_RC_DESCRIPTION "SpeedBreaker"
+#define SB_RC_INTERNAL "SpeedBreaker"
+#define SB_RC_FILE "SpeedBreaker.exe"
+#endif
+
+1 ICON SB_RC_ICON
+
+// CREATEPROCESS_MANIFEST_RESOURCE_ID (1), RT_MANIFEST (24).
+1 24 SB_RC_MANIFEST
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION 0,0,0,0
+PRODUCTVERSION 0,0,0,0
+FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+FILEFLAGS 0
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_APP
+FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "SpeedBreaker"
+            VALUE "FileDescription", SB_RC_DESCRIPTION
+            VALUE "FileVersion", "0.0.0.0"
+            VALUE "InternalName", SB_RC_INTERNAL
+            VALUE "LegalCopyright", "GPL-3.0-or-later"
+            VALUE "OriginalFilename", SB_RC_FILE
+            VALUE "ProductName", SB_RC_NAME
+            VALUE "ProductVersion", "0.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

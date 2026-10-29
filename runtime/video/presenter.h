@@ -1,0 +1,221 @@
+// SpeedBreaker runtime. GPL-3.0-or-later (see COPYING).
+//
+// Window and presentation (Phase 5, milestone 1). An SDL3 window with a
+// Vulkan swapchain (MoltenVK on macOS). Each XE_SWAP hands over the game's
+// front buffer (a texture in guest physical memory); it is untiled and
+// converted on the CPU and scaled into the window.
+#pragma once
+#include <cstdint>
+#include <future>
+#include <mutex>
+#include <vector>
+
+#include <vulkan/vulkan.h>
+
+namespace video
+{
+    // NFSMW_LOG_COVERS=1 (gpu/covers.h): the picture lines logged so far
+    // (each a new box or layer).
+    uint64_t PictureCoverHits();
+
+    // Main thread only (macOS requires windows there). Returns false if no
+    // window could be created; the game then runs headless.
+    bool Initialize();
+
+    // Any thread (the command processor): the front buffer to show next.
+    // `fetch` is its texture fetch constant (6 dwords, host order).
+    void SubmitFrontBuffer(const uint32_t fetch[6], uint32_t width, uint32_t height);
+
+    // Any thread (the renderer): present this image (RGBA8, VK_IMAGE_LAYOUT_GENERAL),
+    // written by a queue submission made before this call. `aspectWidth` x
+    // `aspectHeight`: the frame's shape when the image is at another
+    // resolution (internal resolution scaling; 0: the image's own).
+    // `between`: an in-between picture (game/hfr.h), its fraction of the world
+    // step; shown at that fraction of the guest vblank after the one before
+    // it, ahead of the real picture (0: a real picture).
+    // `shift`: a real picture to be shown that much of a vblank before its
+    // own time (game/hfr.h: a step drawn only between; below 0).
+    // `target`: when to show it (steady ns; game/hfr.h on a display whose
+    // rate isn't a whole multiple of 60 Hz: the refresh it was drawn for; 0:
+    // the usual way).
+    void SubmitFrontImage(VkImage image, uint32_t width, uint32_t height, uint32_t aspectWidth = 0, uint32_t aspectHeight = 0,
+        float between = 0.0f, float shift = 0.0f, int64_t target = 0);
+
+    // Any thread: a display at a rate that isn't a whole multiple of 60 Hz
+    // (90, 144, 165) whose presents land on a fixed refresh grid (the refresh
+    // notice's grid check: video/refresh_notice.h), where HFR draws a picture
+    // for each refresh (game/hfr.cpp): its refresh period and a refresh's
+    // time (steady ns). False elsewhere (no grid measured, a multiple of 60
+    // Hz, a Mac). NFSMW_HFR_GRID_HZ=<hz> makes up a grid at that rate on any
+    // display (tests).
+    bool HfrGrid(double& periodNs, int64_t& gridNs);
+
+    // Any thread: pictures the display can show evenly per guest vblank (a
+    // world step) now: the refreshes a vblank is when the vblank is locked
+    // to a display at a multiple of 60 Hz and new frames are held for their
+    // refresh (2 at 120 Hz, at most 4), 2 on a Mac whose frames are shown at
+    // their vblank's time on a 120 Hz display (video/present_schedule.h), else
+    // 1 (game/hfr.h draws no in-between pictures).
+    int HfrPicturesPerStep();
+    // Settings > Display > Smooth Motion is offered (the menu shows it): a
+    // Mac's 120 Hz screen whose pictures the presenter can time
+    // (VK_GOOGLE_display_timing, as ProMotion's). Not yet elsewhere: HFR is
+    // untested on real 90-240 Hz screens there (NFSMW_HFR=1 still turns it on).
+    bool HfrOffered();
+
+    // Wait until the queue is idle (resource replacement).
+    void WaitGpuIdle();
+
+    // Since launch, for the [perf] line: game frames replaced here before
+    // they were shown (dropped), refreshes a game frame stayed on screen past
+    // the vblanks the game gave it (repeated; needs present timing), and game
+    // frames seen on screen (shown; likewise).
+    struct PresentStats
+    {
+        uint64_t dropped, repeated, shown;
+    };
+    PresentStats GetPresentStats();
+
+    // The guest vblank's clock (gpu/command_processor.cpp's Vsync thread),
+    // locked to the display when presents are timed (video/vblank_lock.h).
+    class VblankLock& GuestVblank();
+    // Vsync thread: a guest vblank fired at `t` (ns, steady clock).
+    void NoteGuestVblank(int64_t t);
+    // Any thread: guest vblanks so far, and when the last one fired.
+    uint64_t GuestVblanks();
+    // Lock periods (1/60 s, VblankLock::PeriodNs: one refresh at 60 Hz, two
+    // at 120 Hz) per guest vblank: 1, or 2 at Frame Rate 30 (the game then
+    // shows a frame every other period, and each guest vblank is two world
+    // steps: game/frame_time.cpp).
+    int GuestVblankDivider();
+    int64_t LastGuestVblank();
+
+    // NFSMW_GPU_TIMING=1: GPU time of the post-processing of the game's
+    // frames (AA, then the scale into the swapchain image with the UI; that
+    // part also holds any wait for the image), totals so far.
+    struct PostTiming
+    {
+        uint64_t frames, aaNs, totalNs;
+    };
+    PostTiming GetPostTiming();
+
+    // Any thread: `image` (given to SubmitFrontImage) is about to be
+    // destroyed. Returns once the presenter holds no reference it could still
+    // record; the caller then waits for the GPU (WaitGpuIdle) and destroys it.
+    void ReleaseFrontImage(VkImage image);
+
+    // Main thread: handle window events and present the latest front buffer.
+    // Returns false when the user closes the window.
+    bool RunFrame();
+
+    void Shutdown();
+
+    // Shared with the renderer (gpu/renderer), which records on the command
+    // processor thread. Every vkQueueSubmit/vkQueuePresentKHR holds queueMutex.
+    struct VulkanContext
+    {
+        VkInstance instance;
+        VkPhysicalDevice physical;
+        VkDevice device;
+        uint32_t queueFamily;
+        VkQueue queue;
+        std::mutex* queueMutex;
+        PFN_vkGetMemoryHostPointerPropertiesEXT getMemoryHostPointerProperties;  // nullptr: no host-memory import
+        PFN_vkCmdBeginRenderingKHR cmdBeginRendering;
+        PFN_vkCmdEndRenderingKHR cmdEndRendering;
+        // NFSMW_SHADING_RATE=<w>x<h> (an experiment: what reduced shading,
+        // as foveation would do at the edges, could save at most): the game's
+        // draws shade once per w x h pixels. 0x0: off or unsupported.
+        uint32_t shadingRateW = 0, shadingRateH = 0;
+        // NFSMW_OCCLUSION=1 on a device with precise occlusion queries: the
+        // game's occlusion queries (the sun glare) are counted on the GPU
+        // (gpu/renderer.cpp). resetQueryPool: host query reset (nullptr: the
+        // renderer resets them in its command buffers).
+        bool occlusionCounting = false;
+        PFN_vkResetQueryPool resetQueryPool = nullptr;
+#ifdef _WIN32
+        // Windows on an Intel integrated GPU: the defaults measured on one
+        // (presenter.cpp, IntegratedGpuDefaults). The renderer's part:
+        // fewer and lighter passes, and Auto internal resolution at 1x.
+        bool integratedGpuDefaults = false;
+#endif
+    };
+
+    // nullptr when running headless.
+    const VulkanContext* GetVulkan();
+
+    // Any thread, holding queueMutex (`queueLock`), before a vkQueueSubmit or
+    // vkQueuePresentKHR: waits while the app is in the background. iOS lets
+    // no GPU work start then (Metal fails the command buffer, and MoltenVK
+    // then loses the device for good), so the game's GPU work stops there
+    // until the app is active again.
+    void WaitForeground(std::unique_lock<std::mutex>& queueLock);
+
+    // The whole game stops while the app isn't the active one (iOS: from
+    // "will resign active" to "did become active", SDL's app events), and
+    // carries on where it stopped. SuspendGame stops every guest clock
+    // (cpu/guest_time.h), then lets no GPU work start and drains the queue,
+    // then pauses the audio output. ResumeGame lets GPU work start, then
+    // guest time move on, then the audio play. Idempotent: UIKit reports
+    // each transition twice. The main thread (the app events come there,
+    // and RunFrame stops and restarts the input), or NFSMW_TEST_SUSPEND's
+    // thread when headless (no main loop): never both.
+    void SuspendGame();
+    void ResumeGame();
+    // The same thread: 2 s after a resume, logs the clocks, vblanks and
+    // audio frames since, against guest time. RunFrame calls it each frame.
+    void SuspendAudit();
+    // NFSMW_TEST_SUSPEND (report/watchdog.cpp), any thread: SDL app event
+    // `type` (SDL_EVENT_WILL_ENTER_BACKGROUND...), for the main thread to
+    // hand to the same handler SDL would, twice as UIKit does, first thing
+    // in its next frame.
+    void TestAppEvent(uint32_t type);
+
+    // Any thread: the window has the keyboard focus (true when headless).
+    bool WindowFocused();
+
+    // Any thread: the window can be seen (not minimized, hidden or covered;
+    // true when headless). The hang watchdog doesn't count time without it
+    // (nor time suspended, which it reads from guesttime itself).
+    bool WindowVisible();
+
+    // A game frame as the window shows it, without the UI over it and
+    // without letterbox bars: RGB8, top row first.
+    struct CapturedFrame
+    {
+        std::vector<uint8_t> rgb;
+        uint32_t width = 0, height = 0;
+    };
+    // Any thread (a bug report): the next frame the main thread draws, once
+    // drawn. Empty when there is no game frame to capture (headless, before
+    // the game's first frame, a swapchain that can't be read back).
+    std::future<CapturedFrame> CaptureFrame();
+    // Any thread (test tools, debug/frame_tap.cpp): part of the next game
+    // frame drawn, (x0, y0)-(x1, y1) as fractions of the picture (HUD
+    // included, our UI not), once drawn. Empty as CaptureFrame's can be.
+    std::future<CapturedFrame> CaptureRegion(float x0, float y0, float x1, float y1);
+
+    // SteamOS Game Mode (gamescope) and iOS: the window is always fullscreen
+    // there.
+    bool FullscreenLocked();
+
+    // Main thread: whether the window is fullscreen now, and whether that
+    // differs from Settings > Display > Fullscreen because the system changed
+    // it this session (the green button; video/fullscreen_policy.h).
+    bool WindowFullscreen();
+    bool FullscreenWindowDiffers();
+
+    // SteamOS Game Mode (gamescope; NFSMW_GAME_MODE=1|0 says otherwise), as
+    // detected when the window was made. No desktop is on screen there, so a
+    // system file dialog can't be seen either.
+    bool GameMode();
+
+    // NFSMW_PRESENT_SCALE (iOS): the present scale it sets for this run, over
+    // Settings > Display > Screen Resolution; 0 when it isn't set.
+    float PresentScaleOverride();
+
+    // The area of the swapchain a 1280x720 frame covers now (in Fill mode the
+    // whole of a wider or narrower screen, or its 4:3 box when it is
+    // narrower than that; else its 16:9 box); 0x0 without a window.
+    void FrameRegion(uint32_t& width, uint32_t& height);
+}

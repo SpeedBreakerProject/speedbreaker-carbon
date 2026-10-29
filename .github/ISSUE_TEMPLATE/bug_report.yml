@@ -1,0 +1,49 @@
+name: Bug report
+description: "Something doesn't work as it should in SpeedBreaker: Carbon."
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. In the game, open the settings (F1, or Back + Start on a controller), go to **Advanced** and choose **Save Bug Report**, then attach the zip below. Nothing is uploaded until you attach it here.
+
+        **Never attach game files, disc images or anything from your game folder.**
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Settings > Advanced shows it, and the bug report's name has it (for example v0.1.0).
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Download
+      options:
+        - Steam Deck or Steam Machine (SpeedBreaker-Carbon-steamos-x86_64.tar.xz)
+        - Steam Frame (SpeedBreaker-Carbon-steamos-arm64.tar.xz)
+        - Linux PC (SpeedBreaker-Carbon-steamos-x86_64.tar.xz)
+        - Mac (SpeedBreaker-Carbon-macos.dmg)
+        - Built from source
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and OS
+      description: For example "Steam Deck OLED, SteamOS 3.9" or "MacBook Air (M2), macOS 26".
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you were doing, what you expected, what happened instead, and roughly how long into the session.
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Bug report zip
+      description: Drag the speedbreaker-carbon-bug-report-....zip here.
