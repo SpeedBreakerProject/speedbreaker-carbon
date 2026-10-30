@@ -4,6 +4,28 @@ What changed in each SpeedBreaker: Carbon release, newest first. Each release's 
 start from its entry here, and the game shows the entry once, the first time a new version starts
 (offline: it's built into the game).
 
+## v0.1.1
+
+### What's new
+
+- **HDR output on a Mac with an HDR display** (Settings > Display > HDR Output, off by default):
+  the game's highlights — the sun, headlights, lit signs — reach the display's extended dynamic
+  range. This settings overlay stays at standard brightness; the game's own front end and HUD are
+  part of the picture and follow the highlights. HDR Format chooses Auto, Extended Linear, or
+  HDR10 (PQ); Auto uses Extended Linear where the screen reports HDR capability, and stays at
+  standard range where it doesn't.
+- **HDR Strength** (Settings > Display): 2x (200 nits in HDR10) by default, 3x, or 4x. A
+  per-frame average limiter lowers the peak toward SDR when the scene is mostly white, so a
+  boot flash or a full-screen logo does not become a 4x flash.
+
+### More about it
+
+- HDR10 sends PQ with BT.2020 primaries and static metadata; the display's HDR mode still follows
+  macOS. EDR follows the display's current headroom every frame.
+- Bug-report screenshots and NFSMW_CHECK_PRESENT_SEC captures stay standard-range; the PPM decodes
+  PQ from BT.2020 back to Rec.709. NFSMW_HDR=1, NFSMW_HDR_FORMAT=auto|edr|hdr10 and
+  NFSMW_HDR_STRENGTH=2x|3x|4x set them for a run; iOS and Linux don't offer them.
+
 ## v0.1.0
 
 ### What's new
