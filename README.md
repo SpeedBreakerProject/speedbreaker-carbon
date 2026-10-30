@@ -73,6 +73,9 @@ every file. Then you race through Palmont, with things the Xbox 360 couldn't do:
 - **Any screen shape.** On 21:9 screens the view gets wider instead of stretched. The 16:10
   screens of the Steam Deck and many Macs, and other taller screens, show more above and below
   and fill the screen at their own resolution: a Steam Deck renders 1280x800, pixel for pixel.
+- **HDR on a Mac.** With HDR Output on, highlights reach an HDR display's extended range; HDR
+  Strength defaults to 2x/200 nits, and a frame-average limiter keeps a full-white boot frame from
+  becoming a flash.
 - **A steady 60 fps,** locked to your 60 Hz display, with the game's movies paced as on the
   console.
 - **As on the 360:** the nitrous light trails at the console's length, and the picture a real
@@ -441,6 +444,9 @@ page's defaults), *Close*, and *Quit Game*, which asks first, with *Cancel* chos
 | Aspect Ratio | Fill Screen / 16:9 | Fill Screen: wider screens get a wider view; 16:10 and taller screens (the Steam Deck, many Macs) a taller one, rendered in the screen's own shape. 16:9 always shows the classic picture with bars. |
 | Brightness | -5 to +5 | 0, the picture as it is. Each step makes the shadows and mid-tones a little lighter or darker, like a TV's brightness; black and white stay put, and the menus never change. |
 | Xbox 360 Display Gamma | On / Off | On: the gamma ramp the game sets for a real Xbox 360's TV output. Off: the flatter picture, without the ramp. |
+| HDR Output | On / Off | Off. Mac only: sends the picture to an HDR display with brighter highlights (extended dynamic range). The settings overlay stays at standard brightness; the game's own front end and HUD follow the highlights. With Auto on a standard-range display it looks the same as Off. |
+| HDR Format | Auto / Extended Linear / HDR10 (PQ) | Auto: Extended Linear on a display that reports HDR capability, otherwise standard range. HDR10 (PQ) sends the PQ signal and metadata; the display's HDR mode still follows macOS. Mac only; used while HDR Output is on. |
+| HDR Strength | 2x / 3x / 4x | 2x (200 nits in HDR10) by default, up to 4x (400 nits). A mostly white frame is dimmed toward SDR automatically. Mac only; used while HDR Output is on. |
 
 The game's own Brightness slider, in its Options > Video, works too while Xbox 360 Display Gamma
 is on.

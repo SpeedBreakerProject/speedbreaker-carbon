@@ -191,7 +191,7 @@ namespace
         const std::string mw = CMakeVersion(cmake, "SB_VERSION_MW"), carbon = CMakeVersion(cmake, "SB_VERSION_CARBON");
         CHECK(!mw.empty() && !carbon.empty(), "set(SB_VERSION_MW/SB_VERSION_CARBON ...) in CMakeLists.txt");
         CHECK(Has(cmake, "project(SpeedBreaker VERSION ${SB_VERSION} LANGUAGES C CXX)"), "project() takes the game's version");
-        CHECK(carbon == "0.1.0", "NFS: Carbon's first release: %s", carbon.c_str());
+        CHECK(carbon == "0.1.1", "NFS: Carbon's release: %s", carbon.c_str());
         // NFS: Carbon's repository: its own changelog is CHANGELOG.md, Most Wanted's CHANGELOG-mw.md.
         CHECK(Has(Read(root + "/CHANGELOG-mw.md"), "\n## v" + mw + "\n"), "CHANGELOG-mw.md has v%s", mw.c_str());
         const std::string carbonLog = Read(root + "/CHANGELOG.md");
