@@ -38,8 +38,16 @@ namespace video
     // `target`: when to show it (steady ns; game/hfr.h on a display whose
     // rate isn't a whole multiple of 60 Hz: the refresh it was drawn for; 0:
     // the usual way).
+    // `hdrImage`/`hdrView`: the same picture in floats, above 1.0 where the
+    // 8-bit one clipped (NFS: Carbon with an HDR display, gpu/renderer.cpp's
+    // HdrSide), for the HDR composite's highlights; null otherwise.
     void SubmitFrontImage(VkImage image, uint32_t width, uint32_t height, uint32_t aspectWidth = 0, uint32_t aspectHeight = 0,
-        float between = 0.0f, float shift = 0.0f, int64_t target = 0);
+        float between = 0.0f, float shift = 0.0f, int64_t target = 0, VkImage hdrImage = VK_NULL_HANDLE,
+        VkImageView hdrView = VK_NULL_HANDLE);
+
+    // Any thread: the swapchain is HDR (EDR or HDR10), so a float picture
+    // given to SubmitFrontImage is used.
+    bool HdrOutputActive();
 
     // Any thread: a display at a rate that isn't a whole multiple of 60 Hz
     // (90, 144, 165) whose presents land on a fixed refresh grid (the refresh
@@ -99,10 +107,15 @@ namespace video
     };
     PostTiming GetPostTiming();
 
-    // Any thread: `image` (given to SubmitFrontImage) is about to be
+    // Any thread: `image` (given to SubmitFrontImage, as either image) is about to be
     // destroyed. Returns once the presenter holds no reference it could still
     // record; the caller then waits for the GPU (WaitGpuIdle) and destroys it.
     void ReleaseFrontImage(VkImage image);
+
+    // The HDR mode in use, for Settings > Display's help line: "Standard
+    // range", "Extended Linear (EDR), headroom 1.20", or "HDR10 (PQ), 100-400
+    // nits". Main thread.
+    const char* HdrStatus();
 
     // Main thread: handle window events and present the latest front buffer.
     // Returns false when the user closes the window.

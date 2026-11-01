@@ -191,11 +191,17 @@ namespace
         const std::string mw = CMakeVersion(cmake, "SB_VERSION_MW"), carbon = CMakeVersion(cmake, "SB_VERSION_CARBON");
         CHECK(!mw.empty() && !carbon.empty(), "set(SB_VERSION_MW/SB_VERSION_CARBON ...) in CMakeLists.txt");
         CHECK(Has(cmake, "project(SpeedBreaker VERSION ${SB_VERSION} LANGUAGES C CXX)"), "project() takes the game's version");
-        CHECK(carbon == "0.1.0", "NFS: Carbon's first release: %s", carbon.c_str());
+        CHECK(carbon.starts_with("0.1."), "NFS: Carbon's own numbering, from its first release, 0.1.0: %s", carbon.c_str());
         // NFS: Carbon's repository: its own changelog is CHANGELOG.md, Most Wanted's CHANGELOG-mw.md.
         CHECK(Has(Read(root + "/CHANGELOG-mw.md"), "\n## v" + mw + "\n"), "CHANGELOG-mw.md has v%s", mw.c_str());
         const std::string carbonLog = Read(root + "/CHANGELOG.md");
         CHECK(Has(carbonLog, "\n## v" + carbon + "\n"), "CHANGELOG.md has v%s", carbon.c_str());
+        // Its newest entry is this version's (no "## Unreleased" left above it),
+        // and the first release's is kept.
+        const size_t newest = carbonLog.find("\n## ");
+        CHECK(newest != std::string::npos && carbonLog.compare(newest, 6 + carbon.size(), "\n## v" + carbon + "\n") == 0,
+            "CHANGELOG.md's newest entry is v%s", carbon.c_str());
+        CHECK(Has(carbonLog, "\n## v0.1.0\n"), "CHANGELOG.md keeps v0.1.0");
         CHECK(!Has(carbonLog, "## v0.1.9"), "CHANGELOG.md is Carbon's own");
         const std::string rcmake = Read(root + "/runtime/CMakeLists.txt");
         CHECK(Has(rcmake, "set(SB_CHANGELOG ${CMAKE_SOURCE_DIR}/CHANGELOG.md)"), "Carbon builds read CHANGELOG.md");

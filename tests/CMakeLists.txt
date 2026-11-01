@@ -134,6 +134,25 @@ endif()
 # unknown value; in a scratch folder.
 sb_test(settings_scaling_test SOURCES ${SB_SETTINGS_SOURCES} ARGS ${CMAKE_CURRENT_BINARY_DIR}/settings_scaling_scratch)
 target_link_libraries(settings_scaling_test PRIVATE ${SB_SETTINGS_LIBS})
+# The options a game doesn't offer: Most Wanted's Cooler Colors and Shadow
+# Resolution shown and applied as before; NFS: Carbon's hidden and forced to
+# Off and 1x whatever settings.toml or the environment hold. Built once per
+# game; renderer.cpp, presenter.cpp and system_info.cpp are read to check
+# Carbon's renderer keeps 1x, its presenter keeps Cooler Colors off, and the
+# settings dump names a forced option.
+foreach(t settings_offered_test settings_offered_carbon_test)
+    add_executable(${t} ${CMAKE_CURRENT_SOURCE_DIR}/settings_offered_test.cpp ${SB_SETTINGS_SOURCES})
+    target_include_directories(${t} PRIVATE ${RT})
+    target_link_libraries(${t} PRIVATE Threads::Threads ${SB_SETTINGS_LIBS})
+    if(SB_MSVC_FRONTEND)
+        target_compile_options(${t} PRIVATE /O2 -UNDEBUG)
+    else()
+        target_compile_options(${t} PRIVATE -O2 -UNDEBUG)
+    endif()
+    add_test(NAME ${t} COMMAND ${t} ${CMAKE_CURRENT_BINARY_DIR}/${t}_scratch
+        ${RT}/gpu/renderer.cpp ${RT}/video/presenter.cpp ${RT}/report/system_info.cpp)
+endforeach()
+target_compile_definitions(settings_offered_carbon_test PRIVATE SB_GAME_CARBON=1)
 # Internal Resolution Auto's budget on iPhones and iPads, chip by chip
 # (video/scale_budget.cpp), and the scale it makes on the phones' screens.
 sb_test(scale_budget_test SOURCES ${RT}/video/scale_budget.cpp ${RT}/video/picture_fit.cpp)
@@ -146,6 +165,19 @@ sb_test(carbon_scale_test SOURCES ${RT}/video/scale_budget.cpp ${RT}/video/pictu
 # tone shader's wrapping of the scale shaders, settings.cpp for the two
 # options' defaults (Xbox 360 Display Gamma on since v0.1.4).
 sb_test(display_tone_test ARGS ${RT}/video/presenter.cpp ${RT}/user/settings.cpp)
+# HDR Output's highlight curve and transfer functions
+# (video/hdr_output.h, header only).
+sb_test(hdr_output_test)
+# HDR's composite and frame-average GLSL (video/presenter.cpp): the maths
+# that must match hdr_output.h, written out for the glslang check below.
+sb_test(hdr_shader_test ARGS ${RT}/video/presenter.cpp ${CMAKE_CURRENT_BINARY_DIR}/hdr_shaders)
+if(SB_GLSLANG_VALIDATOR)
+    foreach(shader hdr_composite.frag hdr_average.comp)
+        add_test(NAME hdr_shader_check_${shader} COMMAND ${SB_GLSLANG_VALIDATOR} -V --target-env vulkan1.1
+            ${CMAKE_CURRENT_BINARY_DIR}/hdr_shaders/${shader} -o ${CMAKE_CURRENT_BINARY_DIR}/hdr_shaders/${shader}.spv)
+        set_tests_properties(hdr_shader_check_${shader} PROPERTIES DEPENDS hdr_shader_test)
+    endforeach()
+endif()
 # The display's refresh measured from present completions, at 60 Hz and at
 # whole multiples of it (video/refresh_fit.cpp, video/refresh_multiple.h).
 sb_test(refresh_fit_test SOURCES ${RT}/video/refresh_fit.cpp)

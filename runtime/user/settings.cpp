@@ -135,6 +135,58 @@ namespace settings
 #else
         constexpr bool kSmoothMotionHidden = false;
 #endif
+        // Cooler Colors counters Most Wanted's yellow grade; Carbon's own grade
+        // isn't yellow, so it isn't offered there (and stays off: presenter.cpp).
+#ifdef SB_GAME_CARBON
+        constexpr bool kCoolerColorsHidden = true;
+#else
+        constexpr bool kCoolerColorsHidden = false;
+#endif
+        // Shadow Resolution scales Most Wanted's 1600x1600 sun shadow map;
+        // Carbon draws no such map (its car shadows are their own draws), so
+        // the row would change nothing there but cost a hitch: not offered,
+        // and the renderer keeps 1x (renderer.cpp).
+#ifdef SB_GAME_CARBON
+        constexpr bool kShadowResolutionHidden = true;
+#else
+        constexpr bool kShadowResolutionHidden = false;
+#endif
+
+        // HDR Output: on a Mac (EDR, or HDR10) and on Linux, SteamOS and
+        // Windows (HDR10, where the system is in HDR: the presenter offers
+        // it only on a surface that has an HDR10 format). Not on iOS (the
+        // layer would need poking itself) or Android. HDR Format chooses
+        // between EDR and HDR10, so only a Mac shows it.
+#if (defined(__APPLE__) && TARGET_OS_IOS) || defined(__ANDROID__)
+        constexpr bool kHdrHidden = true;
+#else
+        constexpr bool kHdrHidden = false;
+#endif
+#if defined(__APPLE__) && !TARGET_OS_IOS
+        constexpr bool kHdrFormatHidden = false;
+#else
+        constexpr bool kHdrFormatHidden = true;
+#endif
+
+        constexpr EnumEntry kHdrFormatEntries[] = {
+            { 0, "auto", "Auto" },
+            { 1, "edr", "Extended Linear" },
+            { 2, "hdr10", "HDR10 (PQ)" },
+        };
+
+        constexpr EnumEntry kHdrStrengthEntries[] = {
+            { 2, "2x", "2x" },
+            { 3, "3x", "3x" },
+            { 4, "4x", "4x" },
+        };
+
+        constexpr EnumEntry kHdrPaperWhiteEntries[] = {
+            { 0, "auto", "Auto" },
+            { 100, "100", "100 nits" },
+            { 200, "200", "200 nits" },
+            { 300, "300", "300 nits" },
+            { 400, "400", "400 nits" },
+        };
 
         constexpr EnumEntry kAspectEntries[] = {
             { int32_t(AspectMode::Auto), "auto", "Fill Screen" },
@@ -150,6 +202,12 @@ namespace settings
             { 3, "1.5x", "1.5x (1080p)" },
             { 4, "2x", "2x (1440p)" },
             { 6, "3x", "3x (2160p)" },
+        };
+
+        constexpr EnumEntry kShadowResolutionEntries[] = {
+            { 2, "1x", "1x (1600x1600)" },
+            { 3, "1.5x", "1.5x (2400x2400)" },
+            { 4, "2x", "2x (3200x3200)" },
         };
 
         constexpr EnumEntry kAnisotropyEntries[] = {
@@ -282,6 +340,27 @@ namespace settings
               .table = "video", .key = "xbox_display_gamma", .label = "Xbox 360 Display Gamma",
               .description = "The gamma ramp the game itself sets for a real Xbox 360's TV output: a little deeper shadows and brighter mid-tones, as on the console. " SB_GAME_GAMMA_OFF,
               .env = "NFSMW_DISPLAY_GAMMA", .defaultValue = 1 },
+            { .id = Id::CoolerColors, .category = Category::Display, .type = Type::Bool, .apply = Apply::Live, .hidden = kCoolerColorsHidden,
+              .forced = kCoolerColorsHidden,
+              .table = "video", .key = "cooler_colors", .label = "Cooler Colors",
+              .description = "A cooler picture with less of the game's yellow: blue raised, red and green lowered a little, over the whole game picture (menus and movies too). Off: the game's own colors, as on the Xbox 360.",
+              .env = "NFSMW_COOLER_COLORS", .defaultValue = 0 },
+            { .id = Id::Hdr, .category = Category::Display, .type = Type::Bool, .apply = Apply::Live, .hidden = kHdrHidden,
+              .table = "video", .key = "hdr", .label = "HDR Output",
+              .description = "Brighter highlights on an HDR display (extended dynamic range). The game's own picture, including its front end, follows the highlights; this settings overlay stays at standard brightness. Off: the standard-range picture.",
+              .env = "NFSMW_HDR", .defaultValue = 0 },
+            { .id = Id::HdrFormat, .category = Category::Display, .type = Type::Enum, .apply = Apply::Live, .hidden = kHdrFormatHidden,
+              .table = "video", .key = "hdr_format", .label = "HDR Format",
+              .description = "How HDR is sent. Auto: Extended Linear on a display that reports HDR capability, otherwise standard range. HDR10 (PQ) sends the PQ signal and metadata; the display's HDR mode still follows macOS.",
+              .env = "NFSMW_HDR_FORMAT", .defaultValue = 0, .entries = kHdrFormatEntries },
+            { .id = Id::HdrStrength, .category = Category::Display, .type = Type::Enum, .apply = Apply::Live, .hidden = kHdrHidden,
+              .table = "video", .key = "hdr_strength", .label = "HDR Strength",
+              .description = "How far white and highlights go above SDR white: 2x by default, 3x, or 4x. A frame that is mostly white is dimmed toward SDR automatically, so a boot flash or a full-screen logo does not become a 4x flash.",
+              .env = "NFSMW_HDR_STRENGTH", .defaultValue = 2, .entries = kHdrStrengthEntries },
+            { .id = Id::HdrPaperWhite, .category = Category::Display, .type = Type::Enum, .apply = Apply::Live, .hidden = kHdrHidden,
+              .table = "video", .key = "hdr_paper_white", .label = "HDR Paper White",
+              .description = "How bright the game's ordinary white is in HDR10, in nits; highlights go HDR Strength times above it. Auto matches the system: 400 on SteamOS and the Steam Deck, 200 on Windows and Linux, 100 on a Mac. Raise it if HDR looks dimmer than the game in SDR.",
+              .env = "NFSMW_HDR_PAPER_WHITE", .defaultValue = 0, .entries = kHdrPaperWhiteEntries },
             { .id = Id::Sharpening, .category = Category::Graphics, .type = Type::Float, .apply = Apply::Live,
               .table = "video", .key = "sharpening", .label = "Sharpening",
               .description = kFsr1Offered
@@ -300,6 +379,11 @@ namespace settings
               .table = "video", .key = "internal_resolution", .label = "Internal Resolution",
               .description = "Render the 3D scene above the 360's 720p. 1.5x is 1080p, a little over half the pixels of 2x. On a screen of another shape filled by Fill Screen, each step renders that shape: 1x on a Steam Deck is its own 1280x800. " SB_GAME_AUTO_RESOLUTION,
               .env = "NFSMW_RESOLUTION", .defaultValue = kResolutionAuto, .entries = kResolutionEntries },
+            { .id = Id::ShadowResolution, .category = Category::Graphics, .type = Type::Enum, .apply = Apply::Live,
+              .hidden = kShadowResolutionHidden, .forced = kShadowResolutionHidden,
+              .table = "video", .key = "shadow_resolution", .label = "Shadow Resolution",
+              .description = "Sharper sun shadows: draw the game's 1600x1600 shadow map at 1.5x or 2x. 1x is as on the Xbox 360. Higher settings use more GPU time and memory.",
+              .env = "NFSMW_SHADOW_RESOLUTION", .defaultValue = kShadowResolutionDefault, .entries = kShadowResolutionEntries },
             { .id = Id::WindowWidth, .category = Category::Display, .type = Type::Int, .apply = Apply::Restart, .hidden = true,
               .table = "video", .key = "window_width", .label = "Window Width",
               .description = "The window's width when the game starts.",
@@ -493,6 +577,8 @@ namespace settings
                     return false;
                 if ((o.env == nullptr) != (o.type == Type::Key) || o.label == nullptr || o.description == nullptr)
                     return false;
+                if (o.forced && !o.hidden)
+                    return false;  // a row the menu shows changes something
             }
             return true;
         }
@@ -890,6 +976,12 @@ namespace settings
             const char* v = std::getenv(o.env);
             if (!v)
                 return;
+            if (o.forced)
+            {
+                if (log)
+                    fprintf(stderr, "[settings] %s ignored: %s.%s isn't offered in this build\n", o.env, o.table, o.key);
+                return;
+            }
             std::optional<std::string_view> field = EnvField(v, o.envField);
             if (!field)
                 return;
@@ -912,6 +1004,8 @@ namespace settings
                 return false;  // keeps its launch value until the next run
             double v = s_envSet[i].load(std::memory_order_relaxed) ? s_envValue[i].load(std::memory_order_relaxed)
                                                                     : s_stored[i].load(std::memory_order_relaxed);
+            if (kOptions[i].forced)
+                v = Default(i);  // not offered in this build
             return detail::g_effective[i].exchange(v, std::memory_order_relaxed) != v;
         }
 
@@ -1380,8 +1474,8 @@ namespace settings
                 return SetResult::Unchanged;
             s_stored[i].store(*v, std::memory_order_relaxed);
             changed = RecomputeLocked(i);
-            if (s_envSet[i].load(std::memory_order_relaxed))
-                result = SetResult::Overridden;
+            if (s_envSet[i].load(std::memory_order_relaxed) || o.forced)
+                result = SetResult::Overridden;  // a forced option: stored, but this run keeps its default
             else
                 result = detail::g_effective[i].load(std::memory_order_relaxed) == *v ? SetResult::Applied : SetResult::Deferred;
             detail::g_generation.fetch_add(1, std::memory_order_release);

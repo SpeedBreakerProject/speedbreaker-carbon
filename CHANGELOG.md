@@ -4,6 +4,36 @@ What changed in each SpeedBreaker: Carbon release, newest first. Each release's 
 start from its entry here, and the game shows the entry once, the first time a new version starts
 (offline: it's built into the game).
 
+## v0.1.1
+
+### What's new
+
+- **HDR with Carbon's own highlights.** On a Mac with an HDR display, on SteamOS and the Steam
+  Deck OLED with HDR on, and on Linux and Windows PCs whose system is in HDR (Settings > Display >
+  HDR Output, off by default, with HDR Strength and HDR Paper White as in Most Wanted), Carbon's
+  picture keeps the light its scene holds above white: tail lights, street lights, lit windows,
+  nitrous flames and sparks glow brighter than white instead of the 360's clipped highlights,
+  rolled off into the display's headroom. Large bright areas, such as tyre smoke and the sun's
+  halo, are held to a soft glow instead of a flat blown-out blob, while small lights keep their
+  full brightness. The rest of the picture, the HUD and the game seen through the settings
+  overlay stay as in SDR. On a Mac, HDR Format chooses Auto, Extended Linear or HDR10 (PQ). With
+  HDR off, nothing changes. Built on danielgpinheiro's HDR output for Most Wanted (GitHub pull
+  request #38, and Carbon's #2).
+- **A sharp rear-view mirror.** The mirror now renders at the Internal Resolution, like the rest
+  of the scene, so above 1x it's as sharp as the road behind it instead of the 360's
+  stair-stepped 320x240.
+
+### More about it
+
+- Each part of the screen adds at most a tenth of white above SDR (NFSMW_HDR_LOCAL_BUDGET=0 turns
+  that local limit off), on top of the frame-average limiter that dims a mostly white frame.
+  NFSMW_SCALE_MIRROR=0 keeps the mirror at 1x.
+- A possible fix for black grass and ground on AMD Radeon RX 6000 cards under Windows (in Most
+  Wanted, the distant grass on the roadside verges: GitHub issue #67): shaders that look up their
+  lighting per pixel now read it another way, which other GPUs draw the same as before. It isn't
+  confirmed by testers yet; if you still see black patches on an AMD card, please report them
+  (NFSMW_CONST_REL_RING=0: the old read).
+
 ## v0.1.0
 
 ### What's new

@@ -413,7 +413,9 @@ namespace report
             for (const settings::Option& o : settings::Options())
             {
                 text += std::format("  {}.{} = {}", o.table, o.key, settings::FormatValue(o.id, settings::GetValue(o.id)));
-                if (const char* env = settings::EnvOverride(o.id))
+                if (o.forced)
+                    text += "  (not offered in this build: forced)";
+                else if (const char* env = settings::EnvOverride(o.id))
                     text += std::format("  (from {}; saved: {})", env, settings::FormatValue(o.id, settings::GetStoredValue(o.id)));
                 else if (settings::RestartPending(o.id))
                     text += std::format("  (saved: {}, from the next launch)", settings::FormatValue(o.id, settings::GetStoredValue(o.id)));

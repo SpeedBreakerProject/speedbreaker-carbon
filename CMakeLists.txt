@@ -87,8 +87,8 @@ message(STATUS "SpeedBreaker game: ${SB_GAME}")
 # has its changelog with an entry for each version (the in-game "What's new"
 # note is built from it): NFS: Carbon's CHANGELOG.md, Most Wanted's CHANGELOG-mw.md
 # (runtime/CMakeLists.txt).
-set(SB_VERSION_MW 0.2.0)
-set(SB_VERSION_CARBON 0.1.0)
+set(SB_VERSION_MW 0.2.1)
+set(SB_VERSION_CARBON 0.1.1)
 if(SB_GAME STREQUAL "carbon")
     set(SB_VERSION ${SB_VERSION_CARBON})
 else()
