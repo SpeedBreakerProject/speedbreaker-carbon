@@ -68,6 +68,12 @@ sb_test(split_views_test ARGS ${RT}/gpu/renderer.cpp)
 # header only) and the game's split-screen test (game/split_screen.h);
 # input.cpp is read to check users 1-3 follow it.
 sb_test(player_slots_test ARGS ${RT}/hid/input.cpp)
+# NFS: Carbon's split-screen test (game/carbon/split_screen.h, header only;
+# speedbreaker-carbon #5): its front end's split-screen byte, checked against
+# ppc-carbon/ (a Carbon build only); its hook is read to check it uses it.
+if(SB_GAME STREQUAL "carbon")
+    sb_test(carbon_split_screen_test ARGS ${ROOT}/ppc-carbon ${RT}/game/carbon/split_screen.cpp)
+endif()
 # The police vid-cam's side bars, the intro's black frames, the results
 # screen's backdrop and what fills the screen round them (gpu/edge_bars.h,
 # header only).

@@ -79,12 +79,14 @@ every file. Then you race through Palmont, with things the Xbox 360 couldn't do:
   Xbox 360 sends to a TV (the game's own display gamma), so the game's own Brightness slider
   works. Anti-aliasing, sharpening, FSR 1 upscaling, a Brightness setting and up to 16x
   anisotropic filtering are also available.
-- **HDR (new).** On an HDR display (a Mac with one, SteamOS and the Steam Deck OLED with HDR on,
+- **HDR.** On an HDR display (a Mac with one, SteamOS and the Steam Deck OLED with HDR on,
   or a Windows or Linux PC in HDR) tail lights, street lights, lit windows and nitrous flames
   glow brighter than white, from the light Carbon's own scene holds, while the rest of the
   picture stays as it was. Off by default.
-- **A sharp rear-view mirror (new).** The mirror renders at the Internal Resolution, like the
+- **A sharp rear-view mirror.** The mirror renders at the Internal Resolution, like the
   rest of the scene, instead of the console's 320x240.
+- **Two-player split screen (new)** (Quick Race > Quick Race Options > Game Mode: Split Screen),
+  with two controllers.
 - **A guided installer.** It finds your disc image, checks that it is the right game and edition,
   and verifies all 78 files as it copies them. An interrupted install never leaves a broken game.
 - **Your controller, or the keyboard.** Controllers work as an Xbox 360 pad, with hot-plugging
@@ -124,8 +126,8 @@ Duel and finish images are blurred. The game content in them belongs to its owne
 | **Steam Frame** (SteamOS, arm64) | [Download][dl-steamos-arm64]<br>`SpeedBreaker-Carbon-steamos-arm64.tar.xz` | Steam Frame. It plays as a big flat screen in the headset; it is not a VR mode. |
 | **Linux** (x86-64) | [Download][dl-steamos-x86_64] the x86-64 SteamOS build, `SpeedBreaker-Carbon-steamos-x86_64.tar.xz`, or [build from source](#building-from-source) | Tested here on SteamOS. Other distributions: reports welcome. |
 | **Mac** (Apple silicon) | [Download][dl-macos]<br>`SpeedBreaker-Carbon-macos.dmg` | MacBook Pro (M1 Pro) on macOS 27. There is no Intel Mac build. |
-| **Windows** (beta) | [Download][all-releases] `SpeedBreaker-Carbon-0.1.1-windows-x64-beta.zip` from its own pre-release on the Releases page; see [Windows (beta)](#windows-beta) | A ThinkPad laptop with Intel integrated graphics (UHD Graphics, 60 Hz). SpeedBreaker for Most Wanted's Windows testers report NVIDIA and AMD graphics running fine; Intel Arc graphics and 120/144 Hz monitors haven't been tested yet: [reports welcome](#reporting-a-bug). |
-| **iPhone** and **iPad** (experimental) | [Sideload the IPA](#iphone-and-ipad), `SpeedBreaker-Carbon-0.1.1-ios.ipa` on the [release page][releases], or [build it yourself](#iphone-and-ipad) with Xcode | iPhone 18 Pro Max (iOS 27) with a Backbone Pro. Not on the App Store. That was an Xcode-signed build: the IPA itself hasn't been installed on a device yet. |
+| **Windows** (beta) | [Download][all-releases] `SpeedBreaker-Carbon-0.1.2-windows-x64-beta.zip` from its own pre-release on the Releases page; see [Windows (beta)](#windows-beta) | A ThinkPad laptop with Intel integrated graphics (UHD Graphics, 60 Hz). SpeedBreaker for Most Wanted's Windows testers report NVIDIA and AMD graphics running fine; Intel Arc graphics and 120/144 Hz monitors haven't been tested yet: [reports welcome](#reporting-a-bug). |
+| **iPhone** and **iPad** (experimental) | [Sideload the IPA](#iphone-and-ipad), `SpeedBreaker-Carbon-0.1.2-ios.ipa` on the [release page][releases], or [build it yourself](#iphone-and-ipad) with Xcode | iPhone 18 Pro Max (iOS 27) with a Backbone Pro. Not on the App Store. That was an Xcode-signed build: the IPA itself hasn't been installed on a device yet. |
 
 Each link downloads the newest release. Every file and its `.sha256` checksum file are on the
 [latest release page][releases]. To check a download, put its `.sha256` file next to it and run
@@ -138,6 +140,7 @@ name): it should say OK. What changed in each release is in [CHANGELOG.md](CHANG
 - **Everyone:** a disc image of your own **Xbox 360 disc of the USA Collector's Edition** (see
   [Quick start](#quick-start)), about **6 GB** of free space, and a display running at about
   **60 Hz**.
+- **Split screen:** two controllers.
 - **Steam Deck, Steam Machine and Linux PCs** (the x86-64 SteamOS download): a 64-bit x86 CPU
   with AVX2 (x86-64-v3): Intel Haswell (2013) or newer, or AMD Excavator, Zen or newer. A
   Vulkan 1.2 graphics card.
@@ -325,7 +328,7 @@ The Windows version is a **beta**: so far it has been tested on one ThinkPad lap
 integrated graphics (UHD Graphics) and a 60 Hz screen. It runs on the same engine as
 SpeedBreaker for Most Wanted, whose Windows testers report NVIDIA and AMD graphics running fine;
 Intel Arc graphics haven't been tested yet. Download
-`SpeedBreaker-Carbon-0.1.1-windows-x64-beta.zip` from its own pre-release on the
+`SpeedBreaker-Carbon-0.1.2-windows-x64-beta.zip` from its own pre-release on the
 [Releases page][all-releases], right-click it, choose **Extract All**, and double-click
 `SpeedBreaker-Carbon.exe` in the extracted folder (not inside the zip). SpeedBreaker: Carbon
 isn't signed, so Windows may say **"Windows protected your PC"**: click **More info**, then
@@ -347,7 +350,7 @@ SpeedBreaker: Carbon on iPhone and iPad is **experimental**, and it isn't on the
 its own app, **SpeedBreaker Carbon**, and installs beside SpeedBreaker for Most Wanted. There are
 two ways to get it onto your iPhone or iPad:
 
-- **Sideload the IPA (experimental).** The release has an IPA, `SpeedBreaker-Carbon-0.1.1-ios.ipa`,
+- **Sideload the IPA (experimental).** The release has an IPA, `SpeedBreaker-Carbon-0.1.2-ios.ipa`,
   on the [release page][releases]. A sideloading tool such as AltStore signs it with your own Apple
   Account and installs it. The game asks iOS for more memory than most apps, and a free Apple
   Account can't give all of it, so with a free account it may not start, or iOS may close it in
@@ -407,8 +410,13 @@ Circle is B, Square is X and Triangle is Y.
 | Right stick | Right stick | O / L up and down, K / ; left and right |
 | Stick clicks | Press a stick in | Z (left), C (right) |
 
-- The first controller connected is used, and you can plug one in at any time. The keyboard
-  always works as well.
+- One player, one controller: the first one connected is used, and you can plug one in at any
+  time. The keyboard always works as well.
+- **Split screen** (Quick Race > Quick Race Options > Game Mode: Split Screen): the second
+  controller joins at "PLAYER 2 Please press START on second controller." and drives the second
+  half of the screen. If a player's controller disconnects, the game pauses and says so until
+  it's back. It renders at most what Internal Resolution's Auto would for your screen; single
+  player keeps your setting.
 - Because Back + Start opens the settings, the game sees Back a moment late: a tap arrives when
   you let go, a hold after a quarter of a second.
 - Every keyboard control can be reassigned: **Settings > Controls** (F1). Each control has two
@@ -573,7 +581,7 @@ in the `SpeedBreaker-Carbon` folder instead.
 2. A notice says where the zip file went: your **Desktop** (on SteamOS, pick it up in Desktop
    Mode, or in the Desktop app on a Steam Frame), or the data folder above when there is no
    Desktop. Its name says which version you were running, for example
-   `speedbreaker-carbon-bug-report-v0.1.1-<date>_<time>.zip`.
+   `speedbreaker-carbon-bug-report-v0.1.2-<date>_<time>.zip`.
 3. Open an [issue][issues], attach the zip, and say what you were doing, what you expected, what
    happened, and roughly how long into the session it happened.
 
@@ -585,8 +593,8 @@ pull requests are handled.
 
 ## Known issues
 
-- **Not in this first release:** two-player split screen, Smooth Motion and the language choice
-  of SpeedBreaker for Most Wanted. The game plays in its disc's language.
+- **Not yet in SpeedBreaker: Carbon:** Smooth Motion and the language choice of SpeedBreaker for
+  Most Wanted. The game plays in its disc's language.
 - **One edition:** only the USA Collector's Edition is supported so far (see
   [Which copy do I need?](#which-copy-do-i-need)).
 - **Mac: wired Xbox controllers don't rumble.** macOS drives an Xbox One or Series controller
@@ -598,8 +606,8 @@ pull requests are handled.
 ## What's next
 
 - **Windows:** in [beta](#windows-beta) now; a full release once it has run on more PCs.
-- More of what SpeedBreaker for Most Wanted has: split screen, Smooth Motion, more languages, more
-  editions of the disc.
+- More of what SpeedBreaker for Most Wanted has: Smooth Motion, more languages, more editions of
+  the disc.
 
 There are no dates and no promises: it's ready when it's ready.
 

@@ -15,6 +15,8 @@
 
 #include <SDL3/SDL.h>
 #include <filesystem>
+#include <fstream>
+#include <sstream>
 
 // key_map.h names XInput's bits as literals (it has no kernel header): keep
 // them the bits the game reads.
@@ -653,11 +655,64 @@ namespace
         }
     }
 
+    // NFSMW_VIRTUAL_PAD_LIVE=<path> (tests): more steps for the virtual pads
+    // from a driver outside, due now. Each new line of the file is
+    // "<pad number>:<step>", a step as in NFSMW_VIRTUAL_PAD without its time
+    // ("2:START", "1:DOWN", "2:DETACH", "1:LX=0.5", "1:SHOT"); the pad must
+    // have been asked for by its variable. Lines are taken once, in order,
+    // as the file grows (main thread, once a frame).
+    const char* const s_padLiveFile = [] { const char* v = std::getenv("NFSMW_VIRTUAL_PAD_LIVE"); return v && *v ? v : nullptr; }();
+
+    void ReadPadLiveFile(double now)
+    {
+        if (!s_padLiveFile)
+            return;
+        static size_t s_taken = 0;  // lines already taken
+        std::error_code ec;
+        const auto size = std::filesystem::file_size(s_padLiveFile, ec);
+        static uintmax_t s_size = 0;
+        if (ec || size == s_size)
+            return;
+        s_size = size;
+        std::ifstream in(s_padLiveFile, std::ios::binary);
+        std::stringstream text;
+        text << in.rdbuf();
+        const std::string all = text.str();
+        const size_t whole = all.rfind('\n');  // a line still being written waits
+        std::istringstream lines(whole == std::string::npos ? std::string() : all.substr(0, whole + 1));
+        std::string line;
+        for (size_t i = 0; std::getline(lines, line); i++)
+        {
+            if (i < s_taken)
+                continue;
+            s_taken = i + 1;
+            if (line.empty())
+                continue;
+            const size_t colon = line.find(':');
+            const int number = colon == std::string::npos ? 0 : std::atoi(line.c_str());
+            if (number < 1 || number > hid::PlayerSlots::kUsers)
+            {
+                fprintf(stderr, "[input] NFSMW_VIRTUAL_PAD_LIVE: no pad in \"%s\"\n", line.c_str());
+                continue;
+            }
+            VirtualPad& vp = s_vpads[number - 1];
+            VirtualPad added;
+            added.number = vp.number;
+            char at[32];
+            snprintf(at, sizeof(at), "%.3f:", now);
+            ParseVirtualPad((at + line.substr(colon + 1)).c_str(), added);
+            vp.steps.insert(vp.steps.end(), added.steps.begin(), added.steps.end());
+            std::stable_sort(vp.steps.begin() + ptrdiff_t(vp.next), vp.steps.end(), [](const PadStep& a, const PadStep& b) { return a.time < b.time; });
+            fprintf(stderr, "[input] NFSMW_VIRTUAL_PAD_LIVE at %.1f s: pad %d: %s\n", now, number, line.substr(colon + 1).c_str());
+        }
+    }
+
     // Moves each virtual pad's axes and buttons due by now. taken[n]: pad
     // n + 1's steps taken ("" if none).
     void StepVirtualPads(std::string taken[hid::PlayerSlots::kUsers])
     {
         double t = SecondsSinceLaunch();
+        ReadPadLiveFile(t);
         bool any = false;
         for (int n = 0; n < hid::PlayerSlots::kUsers; n++)
         {

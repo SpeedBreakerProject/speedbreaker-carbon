@@ -4,6 +4,21 @@ What changed in each SpeedBreaker: Carbon release, newest first. Each release's 
 start from its entry here, and the game shows the entry once, the first time a new version starts
 (offline: it's built into the game).
 
+## v0.1.2
+
+### What's new
+
+- **Two-player split screen** (Quick Race > Quick Race Options > Game Mode: Split Screen): the
+  second controller now joins at "PLAYER 2 Please press START on second controller.", as in
+  SpeedBreaker for Most Wanted. Before, the game only ever saw one controller and that screen
+  waited forever (GitHub issue #5, thanks andrew-ch141).
+
+### More about it
+
+- The controller you use in the menus is player 1; the other one becomes player 2 when you press
+  START on that screen. If player 2's controller is unplugged mid-race, the game pauses and says
+  so until it's back. NFSMW_SPLIT_SCREEN=0 keeps one controller only, as in v0.1.1.
+
 ## v0.1.1
 
 ### What's new
