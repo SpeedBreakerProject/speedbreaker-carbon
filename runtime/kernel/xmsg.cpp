@@ -1,10 +1,11 @@
 // SpeedBreaker runtime. GPL-3.0-or-later (see COPYING).
 //
-// XAM message apps (XMsg*). Only XMP (0xFA, the system music player, which
-// games ask about custom soundtracks) is implemented, following Xenia's
-// kernel/xam/apps/xmp_app.cc message by message. XGI (0xFB: achievements,
-// sessions, stats) and XLiveBase (0xFC) messages fail with X_E_FAIL and a log
-// line, as Xenia's unknown messages do; add them as the game needs them.
+// XAM message apps (XMsg*). XMP (0xFA, the system music player, which games
+// ask about custom soundtracks) follows Xenia's kernel/xam/apps/xmp_app.cc
+// message by message; of XGI (0xFB: achievements, sessions, stats) only
+// XUserWriteAchievements, as Xenia's xgi_app.cc has it. Other XGI and
+// XLiveBase (0xFC) messages fail with X_E_FAIL and a log line, as Xenia's
+// unknown messages do; add them as the game needs them.
 #include <stdafx.h>
 #include "function.h"
 #include "overlapped.h"
@@ -121,11 +122,35 @@ namespace
         return X_E_FAIL;
     }
 
+    uint32_t XgiDispatch(uint32_t message, uint32_t buffer, uint32_t length)
+    {
+        auto* args = Guest<be<uint32_t>>(buffer);
+        switch (message)
+        {
+        case 0x000B0008: // XUserWriteAchievements(count, {user index, achievement id}*)
+        {
+            // Accepted and not kept: there is no profile to unlock them in
+            // (Xenia does the same). NFS: Carbon sends them with a
+            // completion routine (speedbreaker-carbon #7).
+            uint32_t count = args[0];
+            auto* entries = Guest<be<uint32_t>>(args[1]);
+            for (uint32_t i = 0; i < count && i < 64; i++)
+                fprintf(stderr, "[xgi] WriteAchievements: user %u, achievement %u\n", uint32_t(entries[i * 2]),
+                    uint32_t(entries[i * 2 + 1]));
+            return X_E_SUCCESS;
+        }
+        }
+        fprintf(stderr, "[xmsg] app FB message %08X not implemented (returning X_E_FAIL)\n", message);
+        return X_E_FAIL;
+    }
+
     uint32_t Dispatch(uint32_t app, uint32_t message, uint32_t buffer, uint32_t length)
     {
         if (app == 0xFA)
             return XmpDispatch(message, buffer, length);
-        if (app == 0xFB || app == 0xFC)
+        if (app == 0xFB)
+            return XgiDispatch(message, buffer, length);
+        if (app == 0xFC)
         {
             fprintf(stderr, "[xmsg] app %02X message %08X not implemented (returning X_E_FAIL)\n", app, message);
             return X_E_FAIL;

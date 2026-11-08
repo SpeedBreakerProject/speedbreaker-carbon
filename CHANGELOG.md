@@ -4,6 +4,18 @@ What changed in each SpeedBreaker: Carbon release, newest first. Each release's 
 start from its entry here, and the game shows the entry once, the first time a new version starts
 (offline: it's built into the game).
 
+## v0.1.3
+
+### Fixes
+
+- The game no longer crashes when it awards an achievement, such as at the end of the Challenge
+  Series' first circuit (GitHub issue #7, thanks denysmalykhin for the report). Achievements
+  aren't kept anywhere yet; the game just carries on.
+- AMD Radeon on Windows: on AMD's own driver, pixel shaders now keep the Xbox 360's registers as
+  separate variables, the fix SpeedBreaker for Most Wanted v0.2.2 made for its black verge grass
+  (its issue #67). No Carbon picture is known to be wrong there; this keeps Carbon's shaders
+  compiled the same way as Most Wanted's. Other GPUs and drivers run the same shaders as before.
+
 ## v0.1.2
 
 ### What's new

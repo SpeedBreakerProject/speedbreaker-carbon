@@ -5,6 +5,7 @@
 #include <stdafx.h>
 #include "dispatcher.h"
 #include "function.h"
+#include "overlapped.h"
 #include <cpu/guest_thread.h>
 #include <cpu/guest_time.h>
 #include <cpu/backoff.h>
@@ -15,6 +16,15 @@ using namespace dispatcher;
 namespace
 {
     constexpr uint32_t STATUS_OBJECT_TYPE_MISMATCH = 0xC0000024;
+
+    // An alertable wait or sleep first runs the thread's queued APCs
+    // (kernel/apc_queue.h) and, if any ran, returns STATUS_USER_APC without
+    // waiting, as the 360's waits (and Xenia's) do. Only the thread itself
+    // queues APCs, so none can arrive while it waits.
+    bool RanApcs(uint32_t alertable, const char* where)
+    {
+        return alertable != 0 && DeliverApcs(where) != 0;
+    }
 
     template<typename T>
     T* FromHandle(uint32_t handle)
@@ -209,6 +219,8 @@ uint32_t KeWaitForSingleObject(XDISPATCHER_HEADER* object, uint32_t waitReason, 
     Waitable* w = BindDispatcherHeader(*object);
     if (w == nullptr)
         return STATUS_INVALID_PARAMETER;
+    if (RanApcs(alertable, "KeWaitForSingleObject"))
+        return STATUS_USER_APC;
     return WaitForObjects({ &w, 1 }, false, Deadline(timeout));
 }
 
@@ -223,12 +235,16 @@ uint32_t KeWaitForMultipleObjects(uint32_t count, xpointer<XDISPATCHER_HEADER>* 
             return STATUS_INVALID_PARAMETER;
         list.push_back(w);
     }
+    if (RanApcs(alertable, "KeWaitForMultipleObjects"))
+        return STATUS_USER_APC;
     // waitType: 0 = WaitAll, 1 = WaitAny.
     return WaitForObjects(list, waitType == 0, Deadline(timeout));
 }
 
 uint32_t NtWaitForSingleObjectEx(uint32_t handle, uint32_t waitMode, uint32_t alertable, be<int64_t>* timeout)
 {
+    if (RanApcs(alertable, "NtWaitForSingleObjectEx"))
+        return STATUS_USER_APC;
     be<uint32_t> h = handle;
     return WaitHandles({ &h, 1 }, false, timeout);
 }
@@ -236,6 +252,8 @@ uint32_t NtWaitForSingleObjectEx(uint32_t handle, uint32_t waitMode, uint32_t al
 uint32_t NtWaitForMultipleObjectsEx(uint32_t count, be<uint32_t>* handles, uint32_t waitType, uint32_t waitMode,
     uint32_t alertable, be<int64_t>* timeout)
 {
+    if (RanApcs(alertable, "NtWaitForMultipleObjectsEx"))
+        return STATUS_USER_APC;
     return WaitHandles({ handles, count }, waitType == 0, timeout);
 }
 
@@ -251,6 +269,8 @@ uint32_t NtSignalAndWaitForSingleObjectEx(uint32_t signalHandle, uint32_t waitHa
         m->Release(nullptr);
     else
         return STATUS_OBJECT_TYPE_MISMATCH;
+    if (RanApcs(alertable, "NtSignalAndWaitForSingleObjectEx"))
+        return STATUS_USER_APC;
     be<uint32_t> h = waitHandle;
     return WaitHandles({ &h, 1 }, false, timeout);
 }
@@ -259,6 +279,8 @@ uint32_t NtSignalAndWaitForSingleObjectEx(uint32_t signalHandle, uint32_t waitHa
 
 uint32_t KeDelayExecutionThread(uint32_t waitMode, uint32_t alertable, be<int64_t>* interval)
 {
+    if (RanApcs(alertable, "KeDelayExecutionThread"))
+        return STATUS_USER_APC;
     auto deadline = Deadline(interval);
     if (!deadline || *deadline <= guesttime::NowNs())
     {
@@ -313,10 +335,18 @@ GUEST_FUNCTION_HOOK(__imp__NtSignalAndWaitForSingleObjectEx, NtSignalAndWaitForS
 GUEST_FUNCTION_HOOK(__imp__KeDelayExecutionThread, KeDelayExecutionThread);
 GUEST_FUNCTION_HOOK(__imp__NtYieldExecution, NtYieldExecution);
 
-// Critical regions disable normal kernel APC delivery. We don't deliver
-// APCs yet (their first use asserts), so there is nothing to disable.
-void KeEnterCriticalRegion() {}
-void KeLeaveCriticalRegion() {}
+// Critical regions hold back the thread's APCs; leaving the last one runs
+// what waited, as Xenia's XThread::LeaveCriticalRegion does.
+void KeEnterCriticalRegion()
+{
+    ThreadApcs().EnterCriticalRegion();
+}
+
+void KeLeaveCriticalRegion()
+{
+    if (ThreadApcs().LeaveCriticalRegion())
+        DeliverApcs("KeLeaveCriticalRegion");
+}
 
 GUEST_FUNCTION_HOOK(__imp__KeEnterCriticalRegion, KeEnterCriticalRegion);
 GUEST_FUNCTION_HOOK(__imp__KeLeaveCriticalRegion, KeLeaveCriticalRegion);

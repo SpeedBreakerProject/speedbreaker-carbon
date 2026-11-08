@@ -38,6 +38,9 @@ else()
 endif()
 
 sb_test(block_ranges_test)
+# A guest thread's APC queue (kernel/apc_queue.h, header only): XAM completion routines
+# run oldest first, once, and not inside critical regions (speedbreaker-carbon #7).
+sb_test(apc_queue_test)
 # The guest's critical sections (kernel/critical_section.h, header only): RecursionCount
 # big-endian as guest code reads it, and NFS: Carbon's XAudio wait (the ss-pro1 boot hang).
 sb_test(critical_section_test)

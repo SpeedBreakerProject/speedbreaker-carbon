@@ -85,7 +85,7 @@ every file. Then you race through Palmont, with things the Xbox 360 couldn't do:
   picture stays as it was. Off by default.
 - **A sharp rear-view mirror.** The mirror renders at the Internal Resolution, like the
   rest of the scene, instead of the console's 320x240.
-- **Two-player split screen (new)** (Quick Race > Quick Race Options > Game Mode: Split Screen),
+- **Two-player split screen** (Quick Race > Quick Race Options > Game Mode: Split Screen),
   with two controllers.
 - **A guided installer.** It finds your disc image, checks that it is the right game and edition,
   and verifies all 78 files as it copies them. An interrupted install never leaves a broken game.
@@ -126,8 +126,8 @@ Duel and finish images are blurred. The game content in them belongs to its owne
 | **Steam Frame** (SteamOS, arm64) | [Download][dl-steamos-arm64]<br>`SpeedBreaker-Carbon-steamos-arm64.tar.xz` | Steam Frame. It plays as a big flat screen in the headset; it is not a VR mode. |
 | **Linux** (x86-64) | [Download][dl-steamos-x86_64] the x86-64 SteamOS build, `SpeedBreaker-Carbon-steamos-x86_64.tar.xz`, or [build from source](#building-from-source) | Tested here on SteamOS. Other distributions: reports welcome. |
 | **Mac** (Apple silicon) | [Download][dl-macos]<br>`SpeedBreaker-Carbon-macos.dmg` | MacBook Pro (M1 Pro) on macOS 27. There is no Intel Mac build. |
-| **Windows** (beta) | [Download][all-releases] `SpeedBreaker-Carbon-0.1.2-windows-x64-beta.zip` from its own pre-release on the Releases page; see [Windows (beta)](#windows-beta) | A ThinkPad laptop with Intel integrated graphics (UHD Graphics, 60 Hz). SpeedBreaker for Most Wanted's Windows testers report NVIDIA and AMD graphics running fine; Intel Arc graphics and 120/144 Hz monitors haven't been tested yet: [reports welcome](#reporting-a-bug). |
-| **iPhone** and **iPad** (experimental) | [Sideload the IPA](#iphone-and-ipad), `SpeedBreaker-Carbon-0.1.2-ios.ipa` on the [release page][releases], or [build it yourself](#iphone-and-ipad) with Xcode | iPhone 18 Pro Max (iOS 27) with a Backbone Pro. Not on the App Store. That was an Xcode-signed build: the IPA itself hasn't been installed on a device yet. |
+| **Windows** (beta) | [Download][all-releases] `SpeedBreaker-Carbon-0.1.3-windows-x64-beta.zip` from its own pre-release on the Releases page; see [Windows (beta)](#windows-beta) | A ThinkPad laptop with Intel integrated graphics (UHD Graphics, 60 Hz). SpeedBreaker for Most Wanted's Windows testers report NVIDIA and AMD graphics running fine; Intel Arc graphics and 120/144 Hz monitors haven't been tested yet: [reports welcome](#reporting-a-bug). |
+| **iPhone** and **iPad** (experimental) | [Sideload the IPA](#iphone-and-ipad), `SpeedBreaker-Carbon-0.1.3-ios.ipa` on the [release page][releases], or [build it yourself](#iphone-and-ipad) with Xcode | iPhone 18 Pro Max (iOS 27) with a Backbone Pro. Not on the App Store. That was an Xcode-signed build: the IPA itself hasn't been installed on a device yet. |
 
 Each link downloads the newest release. Every file and its `.sha256` checksum file are on the
 [latest release page][releases]. To check a download, put its `.sha256` file next to it and run
@@ -328,7 +328,7 @@ The Windows version is a **beta**: so far it has been tested on one ThinkPad lap
 integrated graphics (UHD Graphics) and a 60 Hz screen. It runs on the same engine as
 SpeedBreaker for Most Wanted, whose Windows testers report NVIDIA and AMD graphics running fine;
 Intel Arc graphics haven't been tested yet. Download
-`SpeedBreaker-Carbon-0.1.2-windows-x64-beta.zip` from its own pre-release on the
+`SpeedBreaker-Carbon-0.1.3-windows-x64-beta.zip` from its own pre-release on the
 [Releases page][all-releases], right-click it, choose **Extract All**, and double-click
 `SpeedBreaker-Carbon.exe` in the extracted folder (not inside the zip). SpeedBreaker: Carbon
 isn't signed, so Windows may say **"Windows protected your PC"**: click **More info**, then
@@ -350,7 +350,7 @@ SpeedBreaker: Carbon on iPhone and iPad is **experimental**, and it isn't on the
 its own app, **SpeedBreaker Carbon**, and installs beside SpeedBreaker for Most Wanted. There are
 two ways to get it onto your iPhone or iPad:
 
-- **Sideload the IPA (experimental).** The release has an IPA, `SpeedBreaker-Carbon-0.1.2-ios.ipa`,
+- **Sideload the IPA (experimental).** The release has an IPA, `SpeedBreaker-Carbon-0.1.3-ios.ipa`,
   on the [release page][releases]. A sideloading tool such as AltStore signs it with your own Apple
   Account and installs it. The game asks iOS for more memory than most apps, and a free Apple
   Account can't give all of it, so with a free account it may not start, or iOS may close it in
@@ -581,7 +581,7 @@ in the `SpeedBreaker-Carbon` folder instead.
 2. A notice says where the zip file went: your **Desktop** (on SteamOS, pick it up in Desktop
    Mode, or in the Desktop app on a Steam Frame), or the data folder above when there is no
    Desktop. Its name says which version you were running, for example
-   `speedbreaker-carbon-bug-report-v0.1.2-<date>_<time>.zip`.
+   `speedbreaker-carbon-bug-report-v0.1.3-<date>_<time>.zip`.
 3. Open an [issue][issues], attach the zip, and say what you were doing, what you expected, what
    happened, and roughly how long into the session it happened.
 

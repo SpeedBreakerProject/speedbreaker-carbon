@@ -8718,6 +8718,15 @@ void main()
             }
             in.importable = s_vk->getMemoryHostPointerProperties != nullptr;
             in.importRefusal = memplan::ImportRefusal(DriverId(props));
+            // Issue #67: pixel shaders keep registers in separate variables on
+            // AMD's own driver (2 = bit 1 only; NFSMW_SCALAR_REGS=0..3 overrides;
+            // see ScalarRegisters()). Testers on RX 6750 XT: 3 and 2 fixed the
+            // far verge grass, 0 and 1 (vertex shaders only) left it black, so
+            // vertex shaders keep the array everywhere.
+            gpu::SetScalarRegistersDefault(DriverId(props) == VK_DRIVER_ID_AMD_PROPRIETARY ? 2u : 0u);
+            fprintf(stderr, "[renderer] shader registers: %s\n",
+                gpu::ScalarRegisters() == 3u ? "variables" : gpu::ScalarRegisters() == 0u ? "array"
+                : gpu::ScalarRegisters() == 1u ? "variables in vertex shaders" : "variables in pixel shaders");
             in.overrides = memplan::ParseOverrides(std::getenv("NFSMW_SHARED_MEMORY"), std::getenv("NFSMW_SHADOW_MEMORY"),
                 std::getenv("NFSMW_RING_MEMORY"));
             VkMemoryRequirements req;
